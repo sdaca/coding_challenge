@@ -36,10 +36,8 @@ build:
     - alias terraform=tflocal
   script:
     - cd "${TF_ROOT}"
-    - curl -v http://$LOCALSTACK_HOSTNAME:4566
     - sed -i "s/terraform/tflocal/g" "$(which gitlab-terraform)"
-    - echo $LOCALSTACK_HOSTNAME
-    - tflocal plan
+    - tflocal init
     - gitlab-terraform plan
     - gitlab-terraform plan-json
   resource_group: ${TF_STATE_NAME}
