@@ -10,6 +10,7 @@ terraform {
 }
 
 module "hello_world" {
-  source = "./modules/hello_world"
-  prefix = "test"
+  source       = "./modules/hello_world"
+  prefix       = "test"
+  trigger_rate = 120
 }
