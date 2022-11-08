@@ -12,6 +12,7 @@ data "aws_iam_policy_document" "lambda" {
 }
 
 resource "aws_iam_role" "lambda_role" {
+  count              = var.enabled ? 1 : 0
   name               = "lambda-${var.prefix}-hello-world"
   assume_role_policy = data.aws_iam_policy_document.lambda.json
 }
