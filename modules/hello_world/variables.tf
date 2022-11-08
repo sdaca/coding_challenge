@@ -3,10 +3,10 @@ variable "prefix" {
   type        = string
 }
 
-variable "trigger_rate" {
-  description = "Rate [in minutes] in which the lambda function should be invoked"
-  type        = number
-  default     = 60
+variable "schedule_expression" {
+  description = "The scheduling expression. For example, cron(0 20 * * ? *) or rate(5 minutes)"
+  type        = string
+  default     = "cron(0 * * * ? *)"
 }
 
 variable "enabled" {

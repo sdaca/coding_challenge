@@ -2,7 +2,7 @@ resource "aws_cloudwatch_event_rule" "lambda_cron" {
   count = var.enabled ? 1 : 0
 
   name                = "${var.prefix}_hello_world"
-  schedule_expression = "rate(${var.trigger_rate} minutes)"
+  schedule_expression = var.schedule_expression
 }
 
 resource "aws_cloudwatch_event_target" "cron" {

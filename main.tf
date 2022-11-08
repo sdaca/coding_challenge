@@ -12,7 +12,7 @@ terraform {
 data "aws_region" "current" {}
 
 module "hello_world" {
-  source       = "./modules/hello_world"
-  prefix       = "test"
-  trigger_rate = 120
+  source              = "./modules/hello_world"
+  prefix              = "test"
+  schedule_expression = "cron(0 */2 * * ? *)"
 }
