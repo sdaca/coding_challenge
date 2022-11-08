@@ -33,5 +33,5 @@ resource "aws_lambda_function" "function" {
 
   runtime = "python3.9"
   handler = "lambda_function.lambda_handler"
-  role    = aws_iam_role.lambda_role.arn
+  role    = aws_iam_role.lambda_role[0].arn
 }
