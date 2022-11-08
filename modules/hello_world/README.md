@@ -41,7 +41,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_enabled"></a> [enabled](#input\_enabled) | Enable or disable lambda function | `bool` | `true` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix of all resource names | `string` | n/a | yes |
-| <a name="input_trigger_rate"></a> [trigger\_rate](#input\_trigger\_rate) | Rate [in minutes] in which the lambda function should be invoked | `number` | `60` | no |
+| <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | The scheduling expression. For example, cron(0 20 * * ? *) or rate(5 minutes) | `string` | `"cron(0 * * * ? *)"` | no |
 
 ## Outputs
 
