@@ -1,0 +1,57 @@
+include:
+  - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
+  - template: Jobs/SAST-IaC.gitlab-ci.yml   # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Jobs/SAST-IaC.gitlab-ci.yml
+
+variables:
+  TF_ROOT: ${CI_PROJECT_DIR}  # The relative path to the root directory of the Terraform project
+  TF_STATE_NAME: default      # The name of the state file used by the GitLab Managed Terraform state backend
+
+stages:
+  - validate
+  - test
+  - build
+  - deploy
+
+fmt:
+  extends: .terraform:fmt
+  needs: []
+
+validate:
+  extends: .terraform:validate
+  needs: []
+
+build:
+  stage: build
+  variables:
+    AWS_ACCESS_KEY_ID: dummy
+    AWS_SECRET_ACCESS_KEY: dummy
+    AWS_DEFAULT_REGION: eu-central-1
+    LOCALSTACK_HOSTNAME: localstack
+  services:
+    - name: localstack/localstack
+      alias: localstack
+  before_script:
+    - apk add py3-pip
+    - pip3 install terraform-local
+    - alias terraform=tflocal
+  script:
+    - cd "${TF_ROOT}"
+    - curl -v http://$LOCALSTACK_HOSTNAME:4566
+    - sed -i "s/terraform/tflocal/g" "$(which gitlab-terraform)"
+    - echo $LOCALSTACK_HOSTNAME
+    - tflocal plan
+    - gitlab-terraform plan
+    - gitlab-terraform plan-json
+  resource_group: ${TF_STATE_NAME}
+  artifacts:
+    paths:
+      - ${TF_ROOT}/plan.cache
+    reports:
+      terraform: ${TF_ROOT}/plan.json
+
+# deploy:
+#   extends: .terraform:deploy
+#   dependencies:
+#     - build
+#   environment:
+#     name: $TF_STATE_NAME
