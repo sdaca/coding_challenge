@@ -9,6 +9,8 @@ terraform {
   }
 }
 
+data "aws_region" "current" {}
+
 module "hello_world" {
   source       = "./modules/hello_world"
   prefix       = "test"
