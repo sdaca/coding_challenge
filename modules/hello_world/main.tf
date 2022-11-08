@@ -24,6 +24,8 @@ data "archive_file" "archive" {
 
 
 resource "aws_lambda_function" "function" {
+  count = var.enabled ? 1 : 0
+
   filename         = local.zip_package
   source_code_hash = data.archive_file.archive.output_base64sha256
 
